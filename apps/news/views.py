@@ -10,7 +10,7 @@ NEWS = [
 
 
 def liste(request):
-    return render(request, 'news/liste.html', {'news': NEWS})
+    return render(request, 'news/list.html', {'news': NEWS})
 
 def detail(request, pk):
     news = next((a for a in NEWS if a['id'] == pk), None)
