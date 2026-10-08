@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Carte des forêts — InForêt{% endblock %}
+
+{% block content %}
+  <h1>Carte des forêts</h1>
+
+  <nav class="layer-tabs">
+    {% for key, label in layers %}
+      <a href="?layer={{ key }}"
+         class="{% if key == current %}active{% endif %}">{{ label }}</a>
+    {% endfor %}
+  </nav>
+
+  <div class="map-layout">
+    <div id="map" class="map-canvas" data-layer="{{ current }}">
+      <p>La carte s'affichera ici.</p>
+    </div>
+
+    <aside class="card map-side">
+      <h2>À propos de cette couche</h2>
+      <p class="body-text">
+        Description de la couche affichée. Les données proviendront de
+        Global Forest Watch.
+      </p>
+      <p class="meta">Source : Global Forest Watch (Hansen / UMD)</p>
+    </aside>
+  </div>
+{% endblock %}

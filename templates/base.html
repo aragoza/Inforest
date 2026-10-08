@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}InForêt{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <header class="barre">
+    <a href="{% url 'accueil' %}" class="logo">InForêt</a>
+
+    <nav class="onglets">
+      <a href="{% url 'news:liste' %}"
+         class="{% if request.resolver_match.app_name == 'news' %}actif{% endif %}">Actualités</a>
+      <a href="{% url 'discovery:liste' %}"
+         class="{% if request.resolver_match.app_name == 'discovery' %}actif{% endif %}">Découverte</a>
+      <a href="{% url 'maps:carte' %}"
+         class="{% if request.resolver_match.app_name == 'maps' %}actif{% endif %}">Carte</a>
+      {% if user.is_authenticated %}
+        <a href="#">Profil</a>
+      {% else %}
+        <a href="#" class="connexion">Se connecter</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="contenu">
+    {% block contenu %}{% endblock %}
+  </main>
+
+  <footer class="pied">
+    <p>All rights reserved &copy; InForest</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }} — InForêt{% endblock %}
+
+{% block content %}
+  <a href="{% url 'news:list' %}" class="back">← Retour aux actualités</a>
+
+  {% if article %}
+    <article class="card">
+      <h1>{{ article.title }}</h1>
+      <p class="meta">{{ article.source }} · {{ article.country }} · {{ article.date }}</p>
+
+      <p class="body-text">
+        Résumé de l'article. Le texte complet viendra du flux RSS une fois
+        le pipeline en place.
+      </p>
+
+      <div class="actions">
+        <a href="{% url 'news:read' article.id %}" class="button">Lire l'article original</a>
+        <button type="button" class="button ghost">Ajouter aux favoris</button>
+      </div>
+    </article>
+  {% else %}
+    <p class="empty">Cette actualité n'existe pas ou a été retirée.</p>
+  {% endif %}
+{% endblock %}

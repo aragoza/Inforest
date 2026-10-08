@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Découverte — InForêt{% endblock %}
+
+{% block content %}
+  <h1>Découvertes sur les forêts</h1>
+
+  <form class="search" method="get" action="{% url 'discovery:list' %}">
+    <input type="search" name="q" value="{{ query }}"
+           placeholder="Rechercher une information" aria-label="Rechercher">
+    <button type="submit" class="button">Rechercher</button>
+  </form>
+
+  {% if query %}
+    <p class="meta search-result">
+      {{ total }} résultat{{ total|pluralize }} pour « {{ query }} » ·
+      <a href="{% url 'discovery:list' %}">Effacer la recherche</a>
+    </p>
+  {% endif %}
+
+  {% for group in groups %}
+    <section class="theme">
+      <h2 class="theme-title">
+        <span class="dot {{ group.key }}"></span>{{ group.label }}
+      </h2>
+
+      <div class="cards">
+        {% for item in group.items %}
+          <a href="{% url 'discovery:detail' discovery.id %}" class="item-card {{ group.key }}">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.summary }}</p>
+          </a>
+        {% empty %}
+          <p class="empty">Aucun contenu dans cette catégorie.</p>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Actualités — InForêt{% endblock %}
+
+{% block content %}
+  <h1>Actualités sur les forêts</h1>
+
+  <section class="card">
+    <ul class="list">
+      {% for article in articles %}
+        <li>
+          <a href="{% url 'news:detail' article.id %}">{{ article.title }}</a>
+          <span class="meta">{{ article.source }} · {{ article.country }} · {{ article.date }}</span>
+        </li>
+      {% empty %}
+        <li class="empty">Aucune actualité pour le moment.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

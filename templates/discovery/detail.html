@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ item.title }} — InForêt{% endblock %}
+
+{% block content %}
+  <a href="{% url 'discovery:list' %}" class="back">← Retour aux découvertes</a>
+
+  {% if item %}
+    <article class="card">
+      <span class="badge {{ item.theme }}">{{ label }}</span>
+      <h1>{{ item.title }}</h1>
+      <p class="body-text">{{ item.summary }}</p>
+
+      <div class="actions">
+        <button type="button" class="button ghost">Ajouter aux favoris</button>
+      </div>
+    </article>
+  {% else %}
+    <p class="empty">Ce contenu n'existe pas ou a été retiré.</p>
+  {% endif %}
+{% endblock %}
