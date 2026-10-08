@@ -1,0 +1,42 @@
+%%{init: {"flowchart": {"wrappingWidth": 360}}}%%
+flowchart TB
+    USERS(["Visiteur, utilisateur connecté, admin"])
+
+    subgraph CLIENT["Navigateur (web + mobile)"]
+        UI["Pages HTML<br/>templates Django + CSS"]
+    end
+
+    subgraph HOST["Hébergement : Render ou Railway"]
+        DJ["<b> Application Django (Gunicorn)</b><br/><br/>accounts : auth + rôles RBAC<br/>news : actualités + sources RSS<br/>discovery : pertes / scientifique / diverses<br/>maps : endpoints JSON des filtres<br/>favorites : favoris + historique<br/>dashboard : flux morts, stats de clics"]
+        DB[("PostgreSQL")]
+        subgraph ASYNC["Tâches planifiées"]
+            BEAT["Celery Beat<br/>planificateur"]
+            REDIS[("Redis<br/>broker")]
+            WORKER["Celery Worker"]
+        end
+    end
+
+    subgraph EXT["Services externes"]
+        RSS["Flux RSS<br/>Mongabay, annuaire facteur-info"]
+        NAPI["NewsAPI / GNews / GDELT"]
+        GFW["Global Forest Watch<br/>tuiles + API : couverture,<br/>perte, regain, alertes"]
+        RESEND["Resend<br/>envoi d'emails"]
+    end
+
+    MAIL(["Boîte mail de l'utilisateur"])
+
+    %% Navigation
+    USERS --> UI
+    UI -- "HTTPS" --> DJ
+    UI -- "requêtes JSON" --> DJ
+    UI -- "tuiles XYZ" --> GFW
+    DJ -- "ORM" --> DB
+
+    %% Tâches planifiées
+    BEAT -- "planifie" --> REDIS
+    REDIS -- "distribue" --> WORKER
+    WORKER -- "fetch_feeds : lecture,<br/>normalisation, déduplication" --> RSS
+    WORKER -- "recherche par mots-clés" --> NAPI
+    WORKER -- "enregistre news<br/>+ état des flux" --> DB
+    WORKER -- "mail hebdomadaire" --> RESEND
+    RESEND --> MAIL
