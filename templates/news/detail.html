@@ -3,7 +3,7 @@
 {% block title %}{{ article.title }} — InForêt{% endblock %}
 
 {% block content %}
-  <a href="{% url 'news:list' %}" class="back">← Retour aux actualités</a>
+  <a href="{% url 'news:liste' %}" class="back">← Retour aux actualités</a>
 
   {% if article %}
     <article class="card">

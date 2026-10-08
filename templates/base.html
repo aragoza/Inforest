@@ -12,30 +12,30 @@
 </head>
 <body>
 
-  <header class="barre">
-    <a href="{% url 'accueil' %}" class="logo">InForêt</a>
+  <header class="navbar">
+    <a href="{% url 'home' %}" class="brand">InForêt</a>
 
-    <nav class="onglets">
+    <nav class="tabs">
       <a href="{% url 'news:liste' %}"
-         class="{% if request.resolver_match.app_name == 'news' %}actif{% endif %}">Actualités</a>
-      <a href="{% url 'discovery:liste' %}"
-         class="{% if request.resolver_match.app_name == 'discovery' %}actif{% endif %}">Découverte</a>
-      <a href="{% url 'maps:carte' %}"
-         class="{% if request.resolver_match.app_name == 'maps' %}actif{% endif %}">Carte</a>
+         class="{% if request.resolver_match.app_name == 'news' %}active{% endif %}">Actualités</a>
+      <a href="{% url 'discovery:list' %}"
+         class="{% if request.resolver_match.app_name == 'discovery' %}active{% endif %}">Découverte</a>
+      <a href="{% url 'maps:map' %}"
+         class="{% if request.resolver_match.app_name == 'maps' %}active{% endif %}">Carte</a>
       {% if user.is_authenticated %}
         <a href="#">Profil</a>
       {% else %}
-        <a href="#" class="connexion">Se connecter</a>
+        <a href="#" class="login">Se connecter</a>
       {% endif %}
     </nav>
   </header>
 
-  <main class="contenu">
-    {% block contenu %}{% endblock %}
+  <main class="container">
+    {% block content %}{% endblock %}
   </main>
 
-  <footer class="pied">
-    <p>All rights reserved &copy; InForest</p>
+  <footer class="footer">
+    <p>Tous droits réservés &copy; InForêt</p>
   </footer>
 
 </body>
