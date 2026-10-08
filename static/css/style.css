@@ -1,0 +1,147 @@
+:root {
+  --foret: #1B4332;
+  --canopee: #2D6A4F;
+  --mousse: #B7E4C7;
+  --ambre: #E8A33D;
+  --brume: #F3F6F2;
+  --teal: #2A9D8F;
+  --encre: #1c2b22;
+  --gris: #5b6d61;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--brume);
+  color: var(--encre);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  color: var(--foret);
+  letter-spacing: -0.01em;
+}
+
+a { color: inherit; }
+
+/* ---------- Barre de navigation ---------- */
+.barre {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e4ece6;
+}
+
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--foret);
+  text-decoration: none;
+}
+
+.onglets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.onglets a {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foret);
+  text-decoration: none;
+}
+
+.onglets a:hover { background: var(--brume); }
+.onglets a.actif { background: var(--mousse); }
+
+.onglets a.connexion {
+  background: var(--foret);
+  color: #fff;
+}
+
+/* ---------- Contenu ---------- */
+.contenu {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+.carte {
+  background: #fff;
+  border: 1px solid #e6efe9;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.liste { list-style: none; }
+
+.liste li {
+  padding: 14px 4px;
+  border-top: 1px solid #eef3ef;
+}
+
+.liste li:first-child { border-top: none; }
+
+.liste a { text-decoration: none; font-weight: 500; }
+.liste a:hover { color: var(--canopee); }
+
+.meta {
+  display: block;
+  font-size: 12.5px;
+  color: var(--gris);
+  margin-top: 2px;
+}
+
+.retour {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--canopee);
+  text-decoration: none;
+}
+
+.bouton {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 12px;
+  background: var(--foret);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14.5px;
+  text-decoration: none;
+}
+
+/* ---------- Pied de page ---------- */
+.pied {
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gris);
+}
+
+/* ---------- Écrans larges ---------- */
+@media (min-width: 768px) {
+  .barre {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 14px 32px;
+  }
+  .contenu { padding: 32px 32px 80px; }
+  .grille {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+  }
+}
