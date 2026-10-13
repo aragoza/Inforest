@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Découverte — InForêt{% endblock %}
+{% block title %}Découverte — Inforest{% endblock %}
 
 {% block content %}
   <h1>Découvertes sur les forêts</h1>
@@ -25,10 +25,10 @@
       </h2>
 
       <div class="cards">
-        {% for item in group.items %}
-          <a href="{% url 'discovery:detail' discovery.id %}" class="item-card {{ group.key }}">
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.summary }}</p>
+        {% for entry in group.entries %}
+          <a href="{% url 'discovery:detail' entry.id %}" class="item-card {{ group.key }}">
+            <h3>{{ entry.title }}</h3>
+            <p>{{ entry.summary }}</p>
           </a>
         {% empty %}
           <p class="empty">Aucun contenu dans cette catégorie.</p>
