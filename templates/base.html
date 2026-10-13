@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}InForêt{% endblock %}</title>
+  <title>{% block title %}Inforest{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,10 +13,10 @@
 <body>
 
   <header class="navbar">
-    <a href="{% url 'home' %}" class="brand">InForêt</a>
+    <a href="{% url 'home' %}" class="brand">Inforest</a>
 
     <nav class="tabs">
-      <a href="{% url 'news:liste' %}"
+      <a href="{% url 'news:list' %}"
          class="{% if request.resolver_match.app_name == 'news' %}active{% endif %}">Actualités</a>
       <a href="{% url 'discovery:list' %}"
          class="{% if request.resolver_match.app_name == 'discovery' %}active{% endif %}">Découverte</a>
@@ -35,7 +35,7 @@
   </main>
 
   <footer class="footer">
-    <p>Tous droits réservés &copy; InForêt</p>
+    <p>All rights reserved &copy; Inforest</p>
   </footer>
 
 </body>
