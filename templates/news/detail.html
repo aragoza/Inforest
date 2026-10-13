@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ article.title }} — InForêt{% endblock %}
+{% block title %}{{ news.title|default:"Actualité" }} — Inforest{% endblock %}
 
 {% block content %}
-  <a href="{% url 'news:liste' %}" class="back">← Retour aux actualités</a>
+  <a href="{% url 'news:list' %}" class="back">← Retour aux actualités</a>
 
-  {% if article %}
+  {% if news %}
     <article class="card">
-      <h1>{{ article.title }}</h1>
-      <p class="meta">{{ article.source }} · {{ article.country }} · {{ article.date }}</p>
+      <h1>{{ news.title }}</h1>
+      <p class="meta">{{ news.source }} · {{ news.country }} · {{ news.date }}</p>
 
       <p class="body-text">
         Résumé de l'article. Le texte complet viendra du flux RSS une fois
@@ -16,7 +16,7 @@
       </p>
 
       <div class="actions">
-        <a href="{% url 'news:read' article.id %}" class="button">Lire l'article original</a>
+        <a href="{% url 'news:read' news.id %}" class="button">Lire l'article original</a>
         <button type="button" class="button ghost">Ajouter aux favoris</button>
       </div>
     </article>
