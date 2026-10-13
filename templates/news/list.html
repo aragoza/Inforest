@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Actualités — InForêt{% endblock %}
+{% block title %}Actualités — Inforest{% endblock %}
 
 {% block content %}
   <h1>Actualités sur les forêts</h1>
 
   <section class="card">
     <ul class="list">
-      {% for article in articles %}
+      {% for new in news %}
         <li>
-          <a href="{% url 'news:detail' article.id %}">{{ article.title }}</a>
-          <span class="meta">{{ article.source }} · {{ article.country }} · {{ article.date }}</span>
+          <a href="{% url 'news:detail' new.id %}">{{ new.title }}</a>
+          <span class="meta">{{ new.source }} · {{ new.country }} · {{ new.date }}</span>
         </li>
       {% empty %}
         <li class="empty">Aucune actualité pour le moment.</li>
