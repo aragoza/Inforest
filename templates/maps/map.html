@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Carte des forêts — InForêt{% endblock %}
+{% block title %}Carte des forêts — Inforest{% endblock %}
 
 {% block content %}
   <h1>Carte des forêts</h1>
@@ -8,12 +8,12 @@
   <nav class="layer-tabs">
     {% for key, label in layers %}
       <a href="?layer={{ key }}"
-         class="{% if key == current %}active{% endif %}">{{ label }}</a>
+         class="{% if key == current_layer %}active{% endif %}">{{ label }}</a>
     {% endfor %}
   </nav>
 
   <div class="map-layout">
-    <div id="map" class="map-canvas" data-layer="{{ current }}">
+    <div id="map" class="map-canvas" data-layer="{{ current_layer }}">
       <p>La carte s'affichera ici.</p>
     </div>
 
