@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}InForêt — l'état des forêts dans le monde{% endblock %}
+{% block title %}Inforest — l'état des forêts dans le monde{% endblock %}
 
 {% block content %}
   <section class="hero">
@@ -10,33 +10,52 @@
       Explorez une carte interactive, suivez l'actualité forestière et découvrez
       chaque jour un fait sur les écosystèmes.
     </p>
-    <div class="actions">
-      <a href="{% url 'maps:map' %}" class="button">Explorer la carte</a>
-      <a href="{% url 'news:liste' %}" class="button ghost">Voir les actualités</a>
-    </div>
   </section>
 
   <div class="grid">
     <section class="card">
       <h2>Découvertes sur les forêts</h2>
       <ul class="list">
-        <li><a href="{% url 'discovery:list' %}">Les mycorhizes relient les arbres entre eux</a>
-          <span class="meta">Information scientifique</span></li>
-        <li><a href="{% url 'discovery:list' %}">L'Amazonie a perdu 2,3 % de sa canopée</a>
-          <span class="meta">Perte de couverture</span></li>
-        <li><a href="{% url 'discovery:list' %}">Un chêne peut vivre plus de 500 ans</a>
-          <span class="meta">Information diverse</span></li>
+        <li>
+          <a href="{% url 'discovery:list' %}">Les mycorhizes relient les arbres entre eux</a>
+          <span class="meta">Information scientifique</span>
+        </li>
+        <li>
+          <a href="{% url 'discovery:list' %}">L'Amazonie a perdu 2,3 % de sa canopée</a>
+          <span class="meta">Perte de couverture</span>
+        </li>
+        <li>
+          <a href="{% url 'discovery:list' %}">Un chêne peut vivre plus de 500 ans</a>
+          <span class="meta">Information diverse</span>
+        </li>
       </ul>
     </section>
 
     <section class="card">
       <h2>Actualités</h2>
       <ul class="list">
-        <li><a href="{% url 'news:liste' %}">Feux de forêt maîtrisés dans les Landes</a>
-          <span class="meta">France · il y a 4 h</span></li>
-        <li><a href="{% url 'news:liste' %}">Vaste plan de reforestation en Indonésie</a>
-          <span class="meta">Monde · il y a 1 j</span></li>
+        <li>
+          <a href="{% url 'news:list' %}">Feux de forêt maîtrisés dans les Landes</a>
+          <span class="meta">France · il y a 4 h</span>
+        </li>
+        <li>
+          <a href="{% url 'news:list' %}">Vaste plan de reforestation en Indonésie</a>
+          <span class="meta">Monde · il y a 1 j</span>
+        </li>
       </ul>
     </section>
+  </div>
+  <div class="map-layout">
+    <div id="map" class="map-canvas" data-layer="{{ current_layer }}">
+      <p>La carte s'affichera ici.</p>
+    </div>
+    <aside class="card map-side">
+      <h2>À propos de cette couche</h2>
+      <p class="body-text">
+        Description de la couche affichée. Les données proviendront de
+        Global Forest Watch.
+      </p>
+      <p class="meta">Source : Global Forest Watch (Hansen / UMD)</p>
+    </aside>
   </div>
 {% endblock %}
