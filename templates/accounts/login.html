@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion — Inforest{% endblock %}
+
+{% block content %}
+  <h1>Se connecter</h1>
+
+  <section class="card form-card">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {{ form.as_p }}
+      <button type="submit" class="button">Se connecter</button>
+    </form>
+
+    <p class="meta">
+      Pas encore de compte ?
+      <a href="{% url 'accounts:register' %}">Créer un compte</a>
+    </p>
+  </section>
+{% endblock %}
