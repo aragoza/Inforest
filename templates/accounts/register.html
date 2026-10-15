@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer un compte — Inforest{% endblock %}
+
+{% block content %}
+  <h1>Créer un compte</h1>
+
+  <section class="card form-card">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="button">Créer mon compte</button>
+    </form>
+
+    <p class="meta">
+      Vous avez déjà un compte ?
+      <a href="{% url 'accounts:login' %}">Se connecter</a>
+    </p>
+  </section>
+{% endblock %}
