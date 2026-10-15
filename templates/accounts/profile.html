@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon profil — Inforest{% endblock %}
+
+{% block content %}
+  <h1>Mon profil</h1>
+
+  <section class="card">
+    <p class="body-text">
+      <strong>{{ user.name }}</strong><br>
+      <span class="meta">{{ user.email }}</span>
+    </p>
+    <p class="meta">
+      Mail hebdomadaire :
+      {% if user.newsletter_option %}activé{% else %}désactivé{% endif %}
+    </p>
+
+    <div class="actions">
+      <a href="{% url 'accounts:preferences' %}" class="button ghost">Modifier mes préférences</a>
+      <a href="{% url 'accounts:change_password' %}" class="button ghost">Changer mon mot de passe</a>
+      <button type="button" class="button ghost danger"
+              onclick="document.getElementById('logout-dialog').showModal()">Se déconnecter</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Favoris</h2>
+    <p class="empty">Aucun favori pour le moment.</p>
+  </section>
+
+  <section class="card">
+    <h2>Historique</h2>
+    <p class="empty">Aucune consultation pour le moment.</p>
+  </section>
+
+  <section class="card">
+    <h2>Mes données</h2>
+    <p class="body-text">
+      Vous pouvez supprimer votre compte.
+    </p>
+    <div class="actions">
+      <a href="{% url 'accounts:delete_account' %}" class="button ghost danger">Supprimer mon compte</a>
+    </div>
+  </section>
+
+  <dialog id="logout-dialog" class="modal">
+    <h2>Se déconnecter ?</h2>
+    <div class="actions">
+      <button type="button" class="button ghost"
+              onclick="document.getElementById('logout-dialog').close()">Annuler</button>
+      <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="button danger">Se déconnecter</button>
+      </form>
+    </div>
+  </dialog>
+{% endblock %}
