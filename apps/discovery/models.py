@@ -1,7 +1,7 @@
 from django.db import models
+import uuid
 
-
-Class Discovery(models.Model):
+class Discovery(models.Model):
     id_discovery = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=300)
     text = models.TextField()
