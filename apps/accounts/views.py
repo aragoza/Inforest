@@ -5,6 +5,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 from .forms import DeleteAccountForm, LoginForm, PreferencesForm, RegisterForm
 
@@ -96,3 +97,33 @@ def delete_account(request):
         form = DeleteAccountForm(request.user)
 
     return render(request, 'accounts/delete_account.html', {'form': form})
+
+@login_required
+def export_data(request):
+    user = request.user
+
+    payload = {
+        'exported_at': timezone.now().isoformat(),
+        'account': {
+            'name': user.name,
+            'email': user.email,
+            'country': user.country.name if user.country else None,
+            'newsletter_option': user.newsletter_option,
+            'created_at': user.created_at.isoformat(),
+            'last_login': user.last_login.isoformat() if user.last_login else None,
+        },
+        'favorites': [
+            {'title': f.news.title, 'url': f.news.url,
+             'added_at': f.added_at.isoformat()}
+            for f in user.news_favorites.select_related('news')
+        ],
+        'history': [
+            {'title': h.news.title, 'url': h.news.url,
+             'viewed_at': h.viewed_at.isoformat()}
+            for h in user.news_history.select_related('news')
+        ],
+    }
+
+    response = JsonResponse(payload, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+    response['Content-Disposition'] = 'attachment; filename="mes-donnees.json"'
+    return response
