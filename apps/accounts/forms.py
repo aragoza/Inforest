@@ -53,12 +53,17 @@ class LoginForm(forms.Form):
 class PreferencesForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('name', 'newsletter_option')
+        fields = ('name', 'country', 'newsletter_option')
         labels = {
             'name': 'Nom affiché',
+            'country': 'Pays suivi',
             'newsletter_option': 'Recevoir le récapitulatif hebdomadaire',
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['country'].empty_label = 'Aucun (actualité mondiale)'
 
 class DeleteAccountForm(forms.Form):
     password = forms.CharField(
