@@ -41,6 +41,7 @@ class User(AbstractUser):
     id_user = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField('nom affiché', max_length=100)
     email = models.EmailField('adresse email', unique=True)
+    country = models.ForeignKey('core.Country', on_delete=models.SET_NULL, null=True, blank=True, related_name='users', verbose_name='pays suivi')
     newsletter_option = models.BooleanField('inscrit au mail hebdomadaire', default=False)
     created_at = models.DateTimeField('date de création', auto_now_add=True)
 
