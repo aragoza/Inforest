@@ -5,15 +5,41 @@
 {% block content %}
   <h1>Actualités sur les forêts</h1>
 
+  {# La recherche est réservée aux comptes : la vue l'ignore pour un visiteur. #}
+  {% if user.is_authenticated %}
+    {% if followed_country %}
+      <p class="lead">Les actualités concernant {{ followed_country.name }} apparaissent en premier.</p>
+    {% endif %}
+    <form class="search" method="get" action="{% url 'news:list' %}">
+      <input type="search" name="q" value="{{ query }}" placeholder="Rechercher un mot…">
+      <select name="source">
+        <option value="">Toutes les sources</option>
+        {% for source in sources %}
+          <option value="{{ source.pk }}"{% if current_source == source.pk|stringformat:"s" %} selected{% endif %}>
+            {{ source.name }}
+          </option>
+        {% endfor %}
+      </select>
+      <button class="button" type="submit">Rechercher</button>
+    </form>
+  {% endif %}
+
   <section class="card">
     <ul class="list">
       {% for new in news %}
         <li>
-          <a href="{% url 'news:detail' new.id %}">{{ new.title }}</a>
-          <span class="meta">{{ new.source }} · {{ new.country }} · {{ new.date }}</span>
+          <a href="{% url 'news:detail' new.pk %}">{{ new.title }}</a>
+          <span class="meta">
+            {{ new.source.name }}
+            · {% if new.country %}{{ new.country.name }}{% else %}Monde{% endif %}
+            {% if new.published_at %}· {{ new.published_at|date:"d/m/Y H:i" }}{% endif %}
+            {% if new.pk in favorite_ids %}· ♥{% endif %}
+          </span>
         </li>
       {% empty %}
-        <li class="empty">Aucune actualité pour le moment.</li>
+        <li class="empty">
+          Aucune actualité pour le moment.
+        </li>
       {% endfor %}
     </ul>
   </section>
