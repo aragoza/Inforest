@@ -11,6 +11,7 @@
       <span class="meta">{{ user.email }}</span>
     </p>
     <p class="meta">
+      Pays suivi : {% if user.country %}{{ user.country.name }}{% else %}aucun (actualité mondiale){% endif %}<br>
       Mail hebdomadaire :
       {% if user.newsletter_option %}activé{% else %}désactivé{% endif %}
     </p>
@@ -18,27 +19,45 @@
     <div class="actions">
       <a href="{% url 'accounts:preferences' %}" class="button ghost">Modifier mes préférences</a>
       <a href="{% url 'accounts:change_password' %}" class="button ghost">Changer mon mot de passe</a>
-      <button type="button" class="button ghost danger"
-              onclick="document.getElementById('logout-dialog').showModal()">Se déconnecter</button>
+      <button type="button" class="button ghost danger" onclick="document.getElementById('logout-dialog').showModal()">Se déconnecter</button>
     </div>
   </section>
 
   <section class="card">
     <h2>Favoris</h2>
-    <p class="empty">Aucun favori pour le moment.</p>
+    {% if user.news_favorites.count %}
+      <p class="body-text">
+        {{ user.news_favorites.count }} article{{ user.news_favorites.count|pluralize }} mis de côté.
+      </p>
+      <div class="actions">
+        <a href="{% url 'news:favorites' %}" class="button ghost">Voir mes favoris</a>
+      </div>
+    {% else %}
+      <p class="empty">Aucun favori pour le moment.</p>
+    {% endif %}
   </section>
 
   <section class="card">
     <h2>Historique</h2>
-    <p class="empty">Aucune consultation pour le moment.</p>
+    {% if user.news_history.count %}
+      <p class="body-text">
+        {{ user.news_history.count }} article{{ user.news_history.count|pluralize }} consulté{{ user.news_history.count|pluralize }}.
+      </p>
+      <div class="actions">
+        <a href="{% url 'news:history' %}" class="button ghost">Voir mon historique</a>
+      </div>
+    {% else %}
+      <p class="empty">Aucune consultation pour le moment.</p>
+    {% endif %}
   </section>
 
   <section class="card">
     <h2>Mes données</h2>
     <p class="body-text">
-      Vous pouvez supprimer votre compte.
+      Vous pouvez télécharger l'ensemble des données que nous conservons sur vous, ou supprimer définitivement votre compte.
     </p>
     <div class="actions">
+      <a href="{% url 'accounts:export_data' %}" class="button ghost">Exporter mes données</a>
       <a href="{% url 'accounts:delete_account' %}" class="button ghost danger">Supprimer mon compte</a>
     </div>
   </section>
