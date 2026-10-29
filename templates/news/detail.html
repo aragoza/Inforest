@@ -1,26 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ news.title|default:"Actualité" }} — Inforest{% endblock %}
+{% block title %}{{ new.title }} — Inforest{% endblock %}
 
 {% block content %}
   <a href="{% url 'news:list' %}" class="back">← Retour aux actualités</a>
 
-  {% if news %}
-    <article class="card">
-      <h1>{{ news.title }}</h1>
-      <p class="meta">{{ news.source }} · {{ news.country }} · {{ news.date }}</p>
+  <article class="card">
+    <h1>{{ new.title }}</h1>
+    <p class="meta">
+      {{ new.source.name }}
+      · {% if new.country %}{{ new.country.name }}{% else %}Monde{% endif %}
+      {% if new.published_at %}· {{ new.published_at|date:"d/m/Y H:i" }}{% endif %}
+    </p>
 
-      <p class="body-text">
-        Résumé de l'article. Le texte complet viendra du flux RSS une fois
-        le pipeline en place.
-      </p>
+    {% if new.image_url %}
+      <img src="{{ new.image_url }}" alt="" class="cover" loading="lazy">
+    {% endif %}
 
-      <div class="actions">
-        <a href="{% url 'news:read' news.id %}" class="button">Lire l'article original</a>
-        <button type="button" class="button ghost">Ajouter aux favoris</button>
-      </div>
-    </article>
-  {% else %}
-    <p class="empty">Cette actualité n'existe pas ou a été retirée.</p>
-  {% endif %}
+    {% if new.summary %}<p class="body-text">{{ new.summary }}</p>{% endif %}
+
+    <div class="actions">
+      <a href="{% url 'news:read' new.pk %}" class="button"
+         target="_blank" rel="noopener noreferrer">Lire l'article original</a>
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'news:toggle_favorite' new.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="button ghost">
+            {% if is_favorite %}Retirer des favoris{% else %}Ajouter aux favoris{% endif %}
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </article>
 {% endblock %}
