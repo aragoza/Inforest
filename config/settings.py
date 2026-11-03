@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
     'apps.core',
     'apps.accounts',
     'apps.news',
@@ -127,6 +129,43 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+
+
+# Console email backend for development
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.filebased.EmailBackend')
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.resend.com')
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='resend')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='InForêt <noreply@localhost>')
+SITE_URL = env('SITE_URL', default='http://127.0.0.1:8000')
+
+# Celery configuration
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='redis://localhost:6379/0')
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_TIMEZONE = 'Europe/Paris'
+
+CELERY_TASK_SOFT_TIME_LIMIT = 540
+CELERY_TASK_TIME_LIMIT = 600
+
+CELERY_BEAT_SCHEDULE = {
+    'collecte-des-flux': {
+        'task': 'news.fetch_feeds',
+        'schedule': crontab(minute=0, hour='6,12,18'),
+    },
+    'mail-hebdomadaire': {
+        'task': 'accounts.send_weekly',
+        'schedule': crontab(minute=0, hour=8, day_of_week=1),
+    },
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -137,7 +176,7 @@ LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Cookies de session et CSRF ---
+# Cookies de session et CSRF
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
