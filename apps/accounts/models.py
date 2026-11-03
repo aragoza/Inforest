@@ -44,6 +44,10 @@ class User(AbstractUser):
     country = models.ForeignKey('core.Country', on_delete=models.SET_NULL, null=True, blank=True, related_name='users', verbose_name='pays suivi')
     newsletter_option = models.BooleanField('inscrit au mail hebdomadaire', default=False)
     created_at = models.DateTimeField('date de création', auto_now_add=True)
+    # Jeton de désinscription
+    newsletter_token = models.UUIDField('jeton de désinscription', default=uuid.uuid4, unique=True, editable=False)
+    # Empeche le double envoi d'un mail
+    last_newsletter_sent_at = models.DateTimeField('dernier mail envoyé', null=True, blank=True)
 
     objects = UserManager()
 
