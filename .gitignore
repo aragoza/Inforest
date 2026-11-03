@@ -5,5 +5,13 @@
 *.pyc
 __pycache__/
 
-#base de données
+# base de données
 db.sqlite3
+
+# tache cron
+celerybeat-schedule
+celerybeat-schedule.*
+celerybeat.pid
+
+# fichiers mails previsualisés
+*.eml
