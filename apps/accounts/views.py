@@ -2,12 +2,14 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import DeleteAccountForm, LoginForm, PreferencesForm, RegisterForm
+from .models import User
 
 
 def register(request):
@@ -127,3 +129,23 @@ def export_data(request):
     response = JsonResponse(payload, json_dumps_params={'ensure_ascii': False, 'indent': 2})
     response['Content-Disposition'] = 'attachment; filename="mes-donnees.json"'
     return response
+
+
+@csrf_exempt
+def newsletter_unsubscribe(request, token):
+    """Désinscription du mail hebdomadaire, sans connexion.
+
+    Le jeton de l'URL est la seule autorisation : la loi veut un retrait aussi
+    simple que l'inscription, et exiger une connexion pour se désinscrire est
+    un obstacle. En GET on affiche une confirmation, car les messageries
+    pré-chargent les liens d'un message : un GET qui désinscrirait serait
+    déclenché par un simple aperçu.
+    """
+    user = get_object_or_404(User, newsletter_token=token)
+
+    if request.method == 'POST':
+        user.newsletter_option = False
+        user.save(update_fields=['newsletter_option'])
+        return render(request, 'accounts/newsletter_done.html', {'email': user.email})
+
+    return render(request, 'accounts/newsletter_unsubscribe.html', {'email': user.email})
