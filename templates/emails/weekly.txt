@@ -1,0 +1,13 @@
+{% autoescape off %}Bonjour {{ user.name }},
+
+{% if user.country %}{{ user.country.name }} et le monde, cette semaine.{% else %}Les forêts dans le monde cette semaine.{% endif %}
+{% for article in articles %}
+{{ forloop.counter }}. {{ article.title }}
+   {{ article.source.name }}{% if article.published_at %} — {{ article.published_at|date:"d/m/Y" }}{% endif %}
+   {{ site_url }}/news/{{ article.pk }}/
+{% endfor %}
+---
+Vous recevez ce message parce que vous avez coché l'inscription au mail
+hebdomadaire sur InForêt. Pour ne plus le recevoir :
+{{ unsubscribe_url }}
+{% endautoescape %}
