@@ -1,0 +1,20 @@
+.git
+.gitignore
+.venv
+__pycache__/
+*.pyc
+
+# Secrets : fournis à l'exécution par docker compose, jamais inscrits dans
+# une image qu'on pourrait publier.
+.env
+
+# Artefacts locaux
+db.sqlite3
+sent_emails/
+celerybeat-schedule
+celerybeat-schedule.*
+celerybeat.pid
+
+# Documentation : inutile dans l'image
+docs/
+*.md

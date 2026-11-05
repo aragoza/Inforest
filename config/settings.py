@@ -136,7 +136,7 @@ EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.filebase
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 EMAIL_HOST = env('EMAIL_HOST', default='smtp.resend.com')
 EMAIL_PORT = env.int('EMAIL_PORT', default=587)
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='resend')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 
@@ -184,3 +184,10 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 14  # 14 jours
+
+
+# Database URL for production (PostgreSQL)
+# Une seule variable décrit la base : moteur, hôte, identifiants. SQLite par
+# défaut pour un poste de travail sans rien à installer, PostgreSQL dans les
+# conteneurs et en production, sans qu'une ligne de code change.
+DATABASES = {'default': env.db('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'),}
