@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Désinscription — Inforest{% endblock %}
+
+{% block content %}
+  <h1>Ne plus recevoir le mail hebdomadaire</h1>
+
+  <section class="card">
+    <p class="body-text">
+      Confirmez la désinscription de <strong>{{ email }}</strong>.
+      Votre compte et vos favoris sont conservés : seul l'envoi du mail
+      hebdomadaire s'arrête.
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="button danger">Me désinscrire</button>
+    </form>
+  </section>
+{% endblock %}

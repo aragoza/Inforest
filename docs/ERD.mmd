@@ -1,0 +1,90 @@
+erDiagram
+    COUNTRY {
+        UUID id_country PK
+        VARCHAR(100) name
+    }
+
+    USER {
+        UUID id_user PK
+        VARCHAR(100) name
+        VARCHAR(254) email UK
+        VARCHAR(128) password
+        BOOLEAN is_admin
+        BOOLEAN newsletter_optin
+        TIMESTAMPTZ created_at
+        UUID id_country FK
+    }
+
+    SOURCE {
+        UUID id_source PK
+        VARCHAR(150) name
+        VARCHAR(500) url UK
+        BOOLEAN status
+    }
+
+    NEWS {
+        UUID id_news PK
+        VARCHAR(300) title
+        TEXT text
+        VARCHAR(500) link
+        TIMESTAMPTZ published_at
+        VARCHAR(20) theme
+        INTEGER views
+        INTEGER likes
+        NUMERIC(3,2) rating
+        VARCHAR(20) status
+        UUID id_source FK
+        UUID id_country FK
+    }
+
+    DISCOVERY {
+        UUID id_discovery PK
+        VARCHAR(300) title
+        TEXT text
+        VARCHAR(20) theme
+        VARCHAR(20) source_type
+        INTEGER views
+        INTEGER likes
+        NUMERIC(3,2) rating
+        VARCHAR(20) status
+        UUID id_country FK
+    }
+
+    USER_NEWS_FAVORITE {
+        UUID id_user FK
+        UUID id_news FK
+        TIMESTAMPTZ added_at
+    }
+
+    USER_NEWS_HISTORY {
+        UUID id_user FK
+        UUID id_news FK
+        TIMESTAMPTZ viewed_at
+    }
+
+    USER_DISCOVERY_FAVORITE {
+        UUID id_user FK
+        UUID id_discovery FK
+        TIMESTAMPTZ added_at
+    }
+
+    USER_DISCOVERY_HISTORY {
+        UUID id_user FK
+        UUID id_discovery FK
+        TIMESTAMPTZ viewed_at
+    }
+
+    COUNTRY |o--o{ USER : "habite"
+    COUNTRY |o--o{ NEWS : "concerne"
+    COUNTRY |o--o{ DISCOVERY : "concerne"
+    SOURCE ||--o{ NEWS : "publie"
+
+    USER ||--o{ USER_NEWS_FAVORITE : "ajoute"
+    NEWS ||--o{ USER_NEWS_FAVORITE : "est mise en favori"
+    USER ||--o{ USER_NEWS_HISTORY : "consulte"
+    NEWS ||--o{ USER_NEWS_HISTORY : "est consultée"
+
+    USER ||--o{ USER_DISCOVERY_FAVORITE : "ajoute"
+    DISCOVERY ||--o{ USER_DISCOVERY_FAVORITE : "est mise en favori"
+    USER ||--o{ USER_DISCOVERY_HISTORY : "consulte"
+    DISCOVERY ||--o{ USER_DISCOVERY_HISTORY : "est consultée"

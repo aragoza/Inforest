@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon historique — Inforest{% endblock %}
+
+{% block content %}
+  <a href="{% url 'accounts:profile' %}" class="back">← Mon profil</a>
+  <h1>Mon historique</h1>
+
+  <section class="card">
+    <ul class="list">
+      {% for new in news %}
+        <li>
+          <a href="{% url 'news:detail' new.pk %}">{{ new.title }}</a>
+          <span class="meta">
+            {{ new.source.name }}
+            · {% if new.country %}{{ new.country.name }}{% else %}Monde{% endif %}
+          </span>
+        </li>
+      {% empty %}
+        <li class="empty">Aucun article lu pour l'instant.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

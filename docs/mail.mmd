@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    participant CB as Celery Beat (planificateur)
+    participant CW as Worker Celery
+    participant DB as PostgreSQL
+    participant TPL as Moteur de templates
+    participant RS as Resend (API email)
+
+    CB->>CW: send_weekly_newsletter()
+    CW->>DB: SELECT utilisateurs abonnés + préférences
+    DB-->>CW: Liste des utilisateurs + région/catégories
+
+    loop Pour chaque utilisateur abonné
+        CW->>DB: SELECT articles pertinents (filtrés par préférences)
+        DB-->>CW: Articles sélectionnés
+        CW->>TPL: render(template_email, context={articles, user})
+        TPL-->>CW: HTML de l'email personnalisé
+        CW->>RS: POST /emails (destinataire, HTML)
+        RS-->>CW: 200 OK + id du message
+    end
+
+    CW-->>CB: Tâche terminée (N emails envoyés)

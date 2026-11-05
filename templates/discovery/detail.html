@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ discovery.title|default:"Découverte" }} — Inforest{% endblock %}
+
+{% block content %}
+  <a href="{% url 'discovery:list' %}" class="back">← Retour aux découvertes</a>
+
+  {% if discovery %}
+    <article class="card">
+      <span class="badge {{ discovery.theme }}">{{ theme_label }}</span>
+      <h1>{{ discovery.title }}</h1>
+      <p class="body-text">{{ discovery.summary }}</p>
+
+      <div class="actions">
+        <button type="button" class="button ghost">Ajouter aux favoris</button>
+      </div>
+    </article>
+  {% else %}
+    <p class="empty">Ce contenu n'existe pas ou a été retiré.</p>
+  {% endif %}
+{% endblock %}

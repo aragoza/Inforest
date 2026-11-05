@@ -1,0 +1,31 @@
+---
+config:
+  theme: mc
+  look: classic
+---
+sequenceDiagram
+    autonumber
+    participant U as Navigateur (utilisateur)
+    participant DJ as Django (vue)
+    participant AU as Auth Django
+    participant DB as PostgreSQL
+
+    U->>DJ: GET /connexion/ (ou /inscription/)
+    DJ-->>U: 200 OK + formulaire HTML
+    U->>DJ: POST formulaire (email, mot de passe, ...)
+
+    alt Connexion
+        DJ->>AU: authenticate(email, password)
+        AU->>DB: SELECT utilisateur WHERE email = ...
+        DB-->>AU: Utilisateur trouvé + hash du mot de passe
+        AU->>AU: Vérifie le hash du mot de passe
+        AU-->>DJ: Utilisateur authentifié
+        DJ->>DJ: login(request, user) — crée la session
+        DJ-->>U: 302 Redirect + cookie de session
+    else Inscription
+        DJ->>DJ: Valide le formulaire (email unique, mdp robuste)
+        DJ->>DB: INSERT nouvel utilisateur (mdp hashé)
+        DB-->>DJ: OK, utilisateur créé
+        DJ->>DJ: login(request, user) — crée la session
+        DJ-->>U: 302 Redirect + cookie de session
+    end

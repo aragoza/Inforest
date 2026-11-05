@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Supprimer mon compte — Inforest{% endblock %}
+
+{% block content %}
+  <a href="{% url 'accounts:profile' %}" class="back">← Retour au profil</a>
+  <h1>Supprimer mon compte</h1>
+
+  <section class="card form-card danger-zone">
+    <p class="body-text">
+      Cette action est définitive
+    </p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="actions">
+        <a href="{% url 'accounts:profile' %}" class="button ghost">Annuler</a>
+        <button type="submit" class="button danger">Supprimer définitivement</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}
