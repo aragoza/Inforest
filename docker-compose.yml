@@ -1,0 +1,86 @@
+# Bloc réutilisé par les trois services applicatifs : ils partagent la même
+# image et le même environnement, seule la commande change.
+x-app: &app
+  build: .
+  env_file: .env
+  environment:
+    DATABASE_URL: postgres://inforest:${POSTGRES_PASSWORD:-inforest}@db:5432/inforest
+    CELERY_BROKER_URL: redis://redis:6379/0
+    CELERY_RESULT_BACKEND: redis://redis:6379/0
+    EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+    EMAIL_HOST: maildev
+    EMAIL_PORT: "1025"
+    EMAIL_USE_TLS: "False"
+  volumes:
+    - .:/app
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: inforest
+      POSTGRES_USER: inforest
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inforest}
+    volumes:
+      # Volume nommé : les données survivent à docker compose down.
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inforest -d inforest"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    <<: *app
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+
+  worker:
+    <<: *app
+    command: celery -A config worker -l info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+  beat:
+    <<: *app
+    # Le fichier d'état de beat va dans /tmp et non dans /app, qui est monté
+    # depuis l'hôte : un conteneur non privilégié n'y a pas toujours le droit
+    # d'écrire, et ce fichier n'a aucune raison de vivre dans le dépôt.
+    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler --schedule=/tmp/celerybeat-schedule
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+  maildev:
+    image: maildev/maildev:latest
+    ports:
+      # Boîte de réception sur http://localhost:1080
+      - "1080:1080"
+
+volumes:
+  pgdata:
