@@ -14,11 +14,42 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* La couleur de fond est portee par html pour que le decor ci-dessous,
+   place en arriere-plan avec z-index: -1, reste visible. */
+html { background: var(--mist); }
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: var(--mist);
   color: var(--ink);
   line-height: 1.5;
+  /* Colonne pleine hauteur : le pied de page descend toujours en bas de
+     l'ecran, donc toujours sur le brun fonce du decor. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Decor : une bande d'arbres en pastel, fixee en bas de la fenetre.
+   La tuile se repete horizontalement, ses bords se raccordent sans couture. */
+body::before {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 340px;
+  background: url('../img/forest-bg-vert.svg') repeat-x bottom center;
+  background-size: auto 340px;
+  /* Fondu vers le haut : la cime des arbres s'efface, pour que le texte
+     qui passe devant reste lisible. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 52%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 52%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  body::before { height: 230px; background-size: auto 230px; }
 }
 
 h1, h2, h3 {
@@ -78,6 +109,8 @@ a { color: inherit; }
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px 60px;
+  width: 100%;
+  flex: 1;
 }
 
 .card {
@@ -139,7 +172,8 @@ a { color: inherit; }
   padding: 20px 16px;
   text-align: center;
   font-size: 13px;
-  color: var(--grey);
+  /* Blanc : le pied de page se lit sur le brun fonce du decor. */
+  color: #fff;
 }
 
 /* ---------- Accueil ---------- */
@@ -169,6 +203,53 @@ a { color: inherit; }
 }
 
 .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.more {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--canopy);
+  text-decoration: none;
+}
+
+.more:hover { text-decoration: underline; }
+
+.side-title { font-size: 18px; margin-bottom: 12px; }
+
+.item-card + .more { margin: 10px 0 20px; }
+
+.newsletter { border-top: 4px solid var(--amber); }
+.newsletter .body-text { margin: 8px 0 16px; }
+
+.explore { margin-top: 32px; }
+.explore .lead { margin: 6px 0 16px; }
+
+.layer-cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+.layer-card {
+  display: block;
+  padding: 22px 18px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e6efe9;
+  border-left: 4px solid var(--canopy);
+  font-weight: 600;
+  color: var(--forest);
+  text-decoration: none;
+}
+
+.layer-card:hover { border-color: var(--canopy); }
+.layer-card.cover { border-left-color: var(--canopy); }
+.layer-card.loss  { border-left-color: var(--loss); }
+.layer-card.gain  { border-left-color: var(--teal); }
 
 /* ---------- Recherche ---------- */
 .search {
@@ -376,4 +457,5 @@ a { color: inherit; }
   .grid { grid-template-columns: 1.3fr 1fr; }
   .cards { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   .map-layout { grid-template-columns: 2fr 1fr; }
+  .layer-cards { grid-template-columns: repeat(3, 1fr); }
 }
